@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Color Changer</title>
+    <style>
+        body {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.5s;
+        }
+
+        #color-input {
+            flex: 0.25;
+            padding: 1em;
+            border-radius: 18px;
+            border-style: none;
+            border: black 3px solid;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="color-input" placeholder="Enter color"/>
+
+    <script>
+        const input = document.querySelector("#color-input");
+        input.addEventListener("input", (evt) => {
+            const color = evt.target.value;
+            document.body.style.backgroundColor = "#" + color;
+        });
+    </script>
+</body>
+</html>
