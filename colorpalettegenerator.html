@@ -1,112 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Color Palette Generator</title>
+    <title>Color Downloader</title>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Libre Baskerville', serif;
-            background-color: #f0f0f0;
+            height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            height: calc(100vh - 20px); /* Adjusted height */
-            margin: 0;
-            padding: 10px;
-            overflow: auto; /* Only show scrollbar when necessary */
-        }
-        #paletteContainer {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-        }
-        .colorBox {
-            width: 100px;
-            height: 100px;
-            border: 2px solid #000;
-            position: relative;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
         }
-        .colorLabel {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            background-color: #000;
-            color: #fff;
+
+        #color-input {
+            padding: 1em;
+            border-radius: 0;
+            border: black 2px solid;
+            font-size: 20px;
             text-align: center;
-            font-size: 14px;
-            padding: 5px 0;
-        }
-        .deleteBtn {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background-color: #ff0000;
-            border: none;
-            color: white;
-            padding: 5px 10px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 12px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-        #addColor, input[type="text"] {
-            padding: 10px 20px;
-            font-size: 16px;
             margin-bottom: 20px;
+            font-family: 'Libre Baskerville', serif;
         }
-        #addColor {
-            background-color: #000;
-            color: #fff;
+
+        #download-btn {
+            padding: 15px 30px;
+            background-color: black;
+            color: white;
             border: none;
+            font-size: 20px;
             cursor: pointer;
-        }
-        @media (max-width: 600px) {
-            .colorBox {
-                width: 80px;
-                height: 80px;
-            }
-            .colorLabel {
-                font-size: 12px;
-            }
-            .deleteBtn {
-                padding: 3px 6px;
-                font-size: 10px;
-            }
+            font-family: 'Libre Baskerville', serif;
         }
     </style>
 </head>
 <body>
-    <div>
-        <input type="text" id="hexInput" placeholder="#000000">
-        <button id="addColor">Add Color</button>
-        <div id="paletteContainer"></div>
-    </div>
+    <input type="text" id="color-input" placeholder="Enter color (e.g., #FF5733)"/>
+    <button id="download-btn">Download Color</button>
+
     <script>
-        document.getElementById('addColor').addEventListener('click', function() {
-            var hexCode = document.getElementById('hexInput').value;
-            var colorBox = document.createElement('div');
-            colorBox.className = 'colorBox';
-            colorBox.style.backgroundColor = hexCode;
-            var deleteBtn = document.createElement('button');
-            deleteBtn.className = 'deleteBtn';
-            deleteBtn.textContent = 'X';
-            deleteBtn.onclick = function() {
-                this.parentElement.remove();
-            };
-            colorBox.appendChild(deleteBtn);
-            var colorLabel = document.createElement('div');
-            colorLabel.className = 'colorLabel';
-            colorLabel.textContent = hexCode;
-            colorBox.appendChild(colorLabel);
-            document.getElementById('paletteContainer').appendChild(colorBox);
-            document.getElementById('hexInput').value = '';
+        const input = document.querySelector("#color-input");
+        const downloadBtn = document.getElementById("download-btn");
+
+        input.addEventListener("keypress", (evt) => {
+            if (evt.key === 'Enter') {
+                const color = evt.target.value;
+                if (color.match(/^#[0-9A-Fa-f]{6}$/)) {
+                    document.body.style.backgroundColor = color;
+                    input.style.display = 'none';
+                    downloadBtn.style.display = 'block';
+                }
+            }
         });
+
+        downloadBtn.addEventListener("click", function() {
+            input.style.display = 'none';
+            downloadBtn.style.display = 'none';
+            html2canvas(document.body, {logging: true, letterRendering: 1, useCORS: true}).then(canvas => {
+                const image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+                const link = document.createElement('a');
+                link.download = 'color.png';
+                link.href = image;
+                link.click();
+                setTimeout(resetTool, 1000); // Reset after 1 second
+            });
+        });
+
+        function resetTool() {
+            document.body.style.backgroundColor = '#f0f0f0'; // Reset background color
+            input.value = ''; // Clear input field
+            input.style.display = 'block'; // Show input again
+            downloadBtn.style.display = 'none'; // Keep download button hidden
+        }
     </script>
 </body>
 </html>
