@@ -12,9 +12,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: calc(100vh - 20px); /* Adjusted height */
             margin: 0;
             padding: 10px;
+            overflow: auto; /* Only show scrollbar when necessary */
         }
         #paletteContainer {
             display: flex;
