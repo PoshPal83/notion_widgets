@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Palette Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Libre Baskerville', serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 10px;
+        }
+        #paletteContainer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        .colorBox {
+            width: 100px;
+            height: 100px;
+            border: 2px solid #000;
+            position: relative;
+            flex-direction: column;
+        }
+        .colorLabel {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            font-size: 14px;
+            padding: 5px 0;
+        }
+        .deleteBtn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: #ff0000;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        #addColor, input[type="text"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        #addColor {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        @media (max-width: 600px) {
+            .colorBox {
+                width: 80px;
+                height: 80px;
+            }
+            .colorLabel {
+                font-size: 12px;
+            }
+            .deleteBtn {
+                padding: 3px 6px;
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <input type="text" id="hexInput" placeholder="#000000">
+        <button id="addColor">Add Color</button>
+        <div id="paletteContainer"></div>
+    </div>
+    <script>
+        document.getElementById('addColor').addEventListener('click', function() {
+            var hexCode = document.getElementById('hexInput').value;
+            var colorBox = document.createElement('div');
+            colorBox.className = 'colorBox';
+            colorBox.style.backgroundColor = hexCode;
+            var deleteBtn = document.createElement('button');
+            deleteBtn.className = 'deleteBtn';
+            deleteBtn.textContent = 'X';
+            deleteBtn.onclick = function() {
+                this.parentElement.remove();
+            };
+            colorBox.appendChild(deleteBtn);
+            var colorLabel = document.createElement('div');
+            colorLabel.className = 'colorLabel';
+            colorLabel.textContent = hexCode;
+            colorBox.appendChild(colorLabel);
+            document.getElementById('paletteContainer').appendChild(colorBox);
+            document.getElementById('hexInput').value = '';
+        });
+    </script>
+</body>
+</html>
